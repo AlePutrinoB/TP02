@@ -5,11 +5,12 @@
  *      Author: utnso
  */
 
-#ifndef TP0_H_
-#define TP0_H_
+#ifndef GAMEBOY_H_
+#define GAMEBOY_H_
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 #include<commons/log.h>
 #include<commons/string.h>
 #include<commons/config.h>
@@ -21,5 +22,6 @@
 t_log* iniciar_logger(void);
 t_config* leer_config(void);
 void terminar_programa(int, t_log*, t_config*);
+char* obtener_key(char* parametro, char* destino);
 
-#endif /* TP0_H_ */
+#endif /* GAMEBOY_H_ */

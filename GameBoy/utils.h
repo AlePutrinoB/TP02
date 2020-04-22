@@ -1,10 +1,3 @@
-/*
- * conexiones.h
- *
- *  Created on: 2 mar. 2019
- *      Author: utnso
- */
-
 #ifndef UTILS_H_
 #define UTILS_H_
 
@@ -21,6 +14,14 @@ typedef enum
 	MENSAJE = 1,
 }op_code;
 
+typedef enum{
+	NEW_POKEMON = 2,
+	APPEARED_POKEMON = 3,
+	CATCH_POKEMON = 4,
+	CAUGHT_POKEMON = 5,
+	GET_POKEMON = 6,
+}tipo_mensaje;
+
 typedef struct
 {
 	int size;
@@ -34,10 +35,12 @@ typedef struct
 } t_paquete;
 
 int crear_conexion(char* ip, char* puerto);
-void enviar_mensaje(char* mensaje, int socket_cliente);
+void enviar_mensaje(char* argv[], int socket_cliente, int tamanio);
 char* recibir_mensaje(int socket_cliente);
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
-char* deserealizar_mensaje(t_buffer* buffer);
+tipo_mensaje obtener_tipo_mensaje(char* tipo);
+void serializar_mensaje(tipo_mensaje tipo, char** argv,int socket_cliente, int tamanio);
+int obtener_size(char* argumentos[], int tamanio);
 
 #endif /* UTILS_H_ */
