@@ -42,5 +42,6 @@ void liberar_conexion(int socket_cliente);
 tipo_mensaje obtener_tipo_mensaje(char* tipo);
 void serializar_mensaje(tipo_mensaje tipo, char** argv,int socket_cliente, int tamanio);
 int obtener_size(char* argumentos[], int tamanio);
+void* generar_stream(char** argumentos, int tamanio, int size);
 
 #endif /* UTILS_H_ */

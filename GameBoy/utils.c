@@ -77,6 +77,20 @@ void enviar_mensaje(char* argv[], int socket_cliente, int tamanio){
 	
 }
 
+void* generar_stream(char** argumentos, int tamanio, int size){
+	int offset = 0;
+	void* stream = malloc(size); 
+	for(int i = 0; i < tamanio; i++){
+		int tamanio_argumento = strlen(argumentos[i]) + 1;
+		printf("argumentos[%d]: %s\n", i, argumentos[i]);
+		memcpy(stream + offset, &tamanio_argumento, sizeof(u_int32_t));
+		offset += sizeof(u_int32_t);
+		memcpy(stream + offset, argumentos[i], tamanio_argumento);
+		offset += strlen(argumentos[i]);
+	}
+	return stream;
+}
+
 void serializar_mensaje(tipo_mensaje codigo, char** argumentos,int socket_cliente, int tamanio){
 	t_paquete * paquete = malloc(sizeof(t_paquete));
 	paquete->codigo_operacion = codigo;
@@ -84,10 +98,31 @@ void serializar_mensaje(tipo_mensaje codigo, char** argumentos,int socket_client
 	int size = obtener_size(argumentos, tamanio);
 	paquete->buffer->size = size;
 
+	/*switch(codigo){
+		case NEW_POKEMON:
+			printf("Se quiere enviar un mensaje NEW_POKEMON\n");
+			//
+			break;
+		case APPEARED_POKEMON:
+			break;
+		case CATCH_POKEMON:
+			break;
+		case CAUGHT_POKEMON:
+			break;
+		case GET_POKEMON:
+			break;
+		default:
+			break;
+	}*/
 
-	void* stream = generar_stream();
+	void* stream = generar_stream(argumentos, tamanio, paquete->buffer->size);
 	
 	paquete->buffer->stream = stream;
+
+	char* mensaje = stream + sizeof(u_int32_t);
+
+	printf("stream: %s\n", mensaje);
+	
 	int size_serializado;
 
 	void* a_enviar = serializar_paquete(paquete, &size_serializado);
