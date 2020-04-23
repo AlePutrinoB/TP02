@@ -1,10 +1,3 @@
-/*
- * conexiones.c
- *
- *  Created on: 2 mar. 2019
- *      Author: utnso
- */
-
 #include "utils.h"
 
 /*
@@ -95,7 +88,8 @@ void serializar_mensaje(tipo_mensaje codigo, char** argumentos,int socket_client
 	t_paquete * paquete = malloc(sizeof(t_paquete));
 	paquete->codigo_operacion = codigo;
 	paquete->buffer = malloc(sizeof(t_buffer));
-	int size = obtener_size(argumentos, tamanio);
+	int size = obtener_size(argumentos, tamanio) + tamanio * sizeof(int);
+	printf("El size es igual a: %d\n", size);
 	paquete->buffer->size = size;
 
 	/*switch(codigo){
