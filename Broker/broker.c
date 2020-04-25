@@ -9,9 +9,8 @@
 
 int main(void)
 {
-
 	iniciar_servidor();
-	printf("Boca el mas grande");
+	
 	return EXIT_SUCCESS;
 }
 

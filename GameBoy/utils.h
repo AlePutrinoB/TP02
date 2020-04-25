@@ -9,17 +9,17 @@
 #include<netdb.h>
 #include<string.h>
 
-typedef enum
+/*typedef enum
 {
 	MENSAJE = 1,
-}op_code;
+}op_code;*/
 
 typedef enum{
-	NEW_POKEMON = 2,
-	APPEARED_POKEMON = 3,
-	CATCH_POKEMON = 4,
-	CAUGHT_POKEMON = 5,
-	GET_POKEMON = 6,
+	NEW_POKEMON = 1,
+	APPEARED_POKEMON = 2,
+	CATCH_POKEMON = 3,
+	CAUGHT_POKEMON = 4,
+	GET_POKEMON = 5,
 }tipo_mensaje;
 
 typedef struct
@@ -30,13 +30,13 @@ typedef struct
 
 typedef struct
 {
-	op_code codigo_operacion;
+	tipo_mensaje codigo_operacion;
 	t_buffer* buffer;
 } t_paquete;
 
 int crear_conexion(char* ip, char* puerto);
 void enviar_mensaje(char* argv[], int socket_cliente, int tamanio);
-char* recibir_mensaje(int socket_cliente);
+//char* recibir_mensaje(int socket_cliente);
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
 tipo_mensaje obtener_tipo_mensaje(char* tipo);

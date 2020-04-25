@@ -51,23 +51,6 @@ void enviar_mensaje(char* argv[], int socket_cliente, int tamanio){
 	char** puntero = argv + 1;
 
 	serializar_mensaje(tipo, puntero, socket_cliente, tamanio);
-	/*switch(tipo){
-		case NEW_POKEMON:
-			printf("Se quiere enviar un mensaje NEW_POKEMON\n");
-			//
-			break;
-		case APPEARED_POKEMON:
-			break;
-		case CATCH_POKEMON:
-			break;
-		case CAUGHT_POKEMON:
-			break;
-		case GET_POKEMON:
-			break;
-		default:
-			break;
-	}*/
-	
 }
 
 void* generar_stream(char** argumentos, int tamanio, int size){
@@ -76,8 +59,8 @@ void* generar_stream(char** argumentos, int tamanio, int size){
 	for(int i = 0; i < tamanio; i++){
 		int tamanio_argumento = strlen(argumentos[i]) + 1;
 		printf("argumentos[%d]: %s\n", i, argumentos[i]);
-		memcpy(stream + offset, &tamanio_argumento, sizeof(u_int32_t));
-		offset += sizeof(u_int32_t);
+		memcpy(stream + offset, &tamanio_argumento, sizeof(int));
+		offset += sizeof(int);
 		memcpy(stream + offset, argumentos[i], tamanio_argumento);
 		offset += strlen(argumentos[i]);
 	}
@@ -92,34 +75,18 @@ void serializar_mensaje(tipo_mensaje codigo, char** argumentos,int socket_client
 	printf("El size es igual a: %d\n", size);
 	paquete->buffer->size = size;
 
-	/*switch(codigo){
-		case NEW_POKEMON:
-			printf("Se quiere enviar un mensaje NEW_POKEMON\n");
-			//
-			break;
-		case APPEARED_POKEMON:
-			break;
-		case CATCH_POKEMON:
-			break;
-		case CAUGHT_POKEMON:
-			break;
-		case GET_POKEMON:
-			break;
-		default:
-			break;
-	}*/
-
 	void* stream = generar_stream(argumentos, tamanio, paquete->buffer->size);
 	
 	paquete->buffer->stream = stream;
 
-	char* mensaje = stream + sizeof(u_int32_t);
+	char* mensaje = stream + sizeof(int);
 
 	printf("stream: %s\n", mensaje);
 	
 	int size_serializado;
 
 	void* a_enviar = serializar_paquete(paquete, &size_serializado);
+	
 	send(socket_cliente, a_enviar, size_serializado, 0);
 
 	free(paquete->buffer);
@@ -135,7 +102,7 @@ int obtener_size(char* argumentos[], int tamanio){
 	return size;
 }
 
-char* recibir_mensaje(int socket_cliente){
+/*char* recibir_mensaje(int socket_cliente){
 	op_code codigo;
 	int buffer_size;
 
@@ -148,7 +115,7 @@ char* recibir_mensaje(int socket_cliente){
 
 	return buffer;
 
-}
+}*/
 
 void liberar_conexion(int socket_cliente){
 	close(socket_cliente);

@@ -24,7 +24,7 @@ int main(int argc, char* argv[]){
 	log_info(logger, "El IP es: %s", ip);
 	log_info(logger, "El PUERTO es: %s", puerto);
 
-	//conexion = crear_conexion(ip,puerto);
+	conexion = crear_conexion(ip,puerto);
 
 	char** p=argv+2;
 	enviar_mensaje(p, conexion, argc - 3);
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
 
 	//free(unMensaje);
 
-	//terminar_programa(conexion, logger, config);
+	terminar_programa(conexion, logger, config);
 }
 
 t_log* iniciar_logger(void){

@@ -21,10 +21,18 @@
 #define IP "127.0.0.1"
 #define PUERTO "37227"
 
-typedef enum
+/*typedef enum
 {
 	MENSAJE=1
-}op_code;
+}op_code;*/
+
+typedef enum{
+	NEW_POKEMON = 1,
+	APPEARED_POKEMON = 2,
+	CATCH_POKEMON = 3,
+	CAUGHT_POKEMON = 4,
+	GET_POKEMON = 5,
+}tipo_mensaje;
 
 typedef struct
 {
