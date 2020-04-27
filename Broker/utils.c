@@ -139,7 +139,7 @@ void devolver_mensaje(void* payload, int size, int socket_cliente)
 {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 
-	paquete->codigo_operacion = MENSAJE;
+	paquete->codigo_operacion = NEW_POKEMON;
 	paquete->buffer = malloc(sizeof(t_buffer));
 	paquete->buffer->size = size;
 	paquete->buffer->stream = malloc(paquete->buffer->size);

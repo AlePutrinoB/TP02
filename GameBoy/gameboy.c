@@ -2,6 +2,9 @@
 
 int main(int argc, char* argv[]){
 
+
+
+
 	printf("argc es igual a: %d\n", argc);
 	for(int i=0; i<argc; i++){
 		printf("argv[%d] es igual a: %s\n", i, argv[i]);
@@ -26,7 +29,9 @@ int main(int argc, char* argv[]){
 
 	conexion = crear_conexion(ip,puerto);
 
+
 	char** p=argv+2;
+
 	enviar_mensaje(p, conexion, argc - 3);
 
 	//char* unMensaje = recibir_mensaje(conexion);
