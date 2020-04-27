@@ -46,17 +46,33 @@ int crear_conexion(char *ip, char* puerto){
 }
 
 void enviar_mensaje(char* argv[], int socket_cliente, int tamanio){
-	tipo_mensaje tipo = obtener_tipo_mensaje(argv[0]);
-	printf("El tamanio es: %d\n", tamanio);
-	char** puntero = argv + 1;
 
-	serializar_mensaje(tipo, puntero, socket_cliente, tamanio);
+	tipo_mensaje tipo = obtener_tipo_mensaje(argv[0]);
+	t_paquete * paquete = malloc(sizeof(t_paquete));
+	paquete->codigo_operacion = tipo;
+	paquete->buffer = malloc(sizeof(t_buffer));
+	int size = obtener_size(argv, tamanio) + tamanio * sizeof(int);
+	printf("El size es igual a: %d\n", size);
+	paquete->buffer->size = size;
+	void* stream = generar_stream(argv + 1, tamanio, paquete->buffer->size);
+
+	paquete->buffer->stream = stream;
+
+	int size_serializado;
+
+	void* a_enviar = serializar_paquete(paquete, &size_serializado);
+
+	send(socket_cliente, a_enviar, size_serializado, 0);
+
+		free(paquete->buffer);
+		free(paquete);
+		free(a_enviar);
 }
 
 void* generar_stream(char** argumentos, int tamanio, int size){
 	int offset = 0;
 	void* stream = malloc(size); 
-
+	printf("Tamaño: %d \n", tamanio);
 	for(int i = 0; i < tamanio; i++){
 		int tamanio_argumento = strlen(argumentos[i])+1 ;
 		printf("argumentos[%d]: %s\n", i, argumentos[i]);
@@ -66,45 +82,10 @@ void* generar_stream(char** argumentos, int tamanio, int size){
 		offset += tamanio_argumento;
 	}
 
-
 	return stream;
 }
 
-void serializar_mensaje(tipo_mensaje codigo, char** argumentos,int socket_cliente, int tamanio){
-	t_paquete * paquete = malloc(sizeof(t_paquete));
-	paquete->codigo_operacion = codigo;
-	paquete->buffer = malloc(sizeof(t_buffer));
-	int size = obtener_size(argumentos, tamanio) + tamanio * sizeof(int);
-	printf("El size es igual a: %d\n", size);
-	paquete->buffer->size = size;
 
-	void* stream = generar_stream(argumentos, tamanio, paquete->buffer->size);
-	
-	paquete->buffer->stream = stream;
-
-	int largo_del_argumento;
-	memcpy(&largo_del_argumento,stream,4);
-
-	char* mensaje = stream ;
-
-	printf("stream: %d\n",largo_del_argumento);
-	
-	/*for(int i = 0; i<paquete->buffer->size; i++){
-		printf("%s\n",(char*)stream+i);
-	}*/ //Lo hice para recorrer de a un caracter y ver como funcionaba
-
-
-
-	int size_serializado;
-
-	void* a_enviar = serializar_paquete(paquete, &size_serializado);
-	
-	send(socket_cliente, a_enviar, size_serializado, 0);
-
-	free(paquete->buffer);
-	free(paquete);
-	free(a_enviar);
-}
 
 int obtener_size(char* argumentos[], int tamanio){
 	int size = 0;
@@ -113,6 +94,7 @@ int obtener_size(char* argumentos[], int tamanio){
 	}
 	return size;
 }
+
 
 /*char* recibir_mensaje(int socket_cliente){
 	op_code codigo;
